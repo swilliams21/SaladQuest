@@ -3,8 +3,9 @@
 public class GameHandler{
   Boolean canMove = false;
   String mode;
-  
-
+  String zone = "TestZone"; //Leave this as a default for errors. Actual zone should be loaded in. If the load fails, this will be the zone.
+  PImage menuMap = loadImage("Zone/TestZone/Map.gif"); //Same as a above ^^^
+  int menuMapX = 0, menuMapY = 0;
   public void displayMainMenu()
   {
     //artist and UI people draw here
@@ -24,6 +25,15 @@ public class GameHandler{
   {
     //artist and UI people draw here//if anybody want to implement a custom drawn map, feel free
     background(0);
+    
+    if(menuMapX<512){menuMapX=512;}
+    else if(menuMapX>1536){menuMapX=1536;}
+    
+    if(menuMapY<256){menuMapY=256;}
+    else if(menuMapY>768){menuMapY=768;}
+    
+    image(menuMap,menuMapX-512,menuMapY-256);
+    
     fill(150);//shade of gray
     rect(900,350,200,50);
     rect(900,400,200,50);
