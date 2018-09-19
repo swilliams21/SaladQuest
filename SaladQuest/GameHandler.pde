@@ -1,11 +1,13 @@
-//From an MVC point of view, this class acts like a Central Model and has Functions of a View
+//From an MVC point of view, this class acts like a Central "Model" and has Functions of a View
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.io.*;
 
 public class GameHandler{
   Boolean canMove = false;
   String mode;
-  String zone = "TestZone"; //Leave this as a default for errors. Actual zone should be loaded in. If the load fails, this will be the zone.
-  PImage menuMap = loadImage("Zone/TestZone/Map.gif"); //Same as a above ^^^
-  int menuMapX = 0, menuMapY = 0;
+  MapMenuHandler MMH = new MapMenuHandler();
+
   public void displayMainMenu()
   {
     //artist and UI people draw here
@@ -21,29 +23,7 @@ public class GameHandler{
     text("Load Game",450,410);
     text("Exit",740,410);
   }
-  public void displayMapMenu()
-  {
-    //artist and UI people draw here//if anybody want to implement a custom drawn map, feel free
-    background(0);
-    
-    if(menuMapX<512){menuMapX=512;}
-    else if(menuMapX>1536){menuMapX=1536;}
-    
-    if(menuMapY<256){menuMapY=256;}
-    else if(menuMapY>768){menuMapY=768;}
-    
-    image(menuMap,menuMapX-512,menuMapY-256);
-    
-    fill(150);//shade of gray
-    rect(900,350,200,50);
-    rect(900,400,200,50);
-    rect(900,450,200,50);
-    fill(0);
-    textSize(24);
-    text("Enter Level",840,362);
-    text("Save Menu",840,412);
-    text("Main Menu",840,462);
-  }
+
   
   public void newGame()
   {
@@ -63,7 +43,11 @@ public class GameHandler{
     else if(m.equals("Map Menu"))
     {
       canMove(true);
-      displayMapMenu();
+        try{MMH.importLevelindex("Zone/TestZone/Levels.txt");}
+      catch(Exception E){rect(200,200,200,200);}
+      MMH.displayMapMenu();
     }
   }
+  
+
 }
