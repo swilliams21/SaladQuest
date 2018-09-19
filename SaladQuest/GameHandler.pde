@@ -43,7 +43,7 @@ public class GameHandler{
     else if(m.equals("Map Menu"))
     {
       canMove(true);
-        try{MMH.importLevelindex("Zone/TestZone/Levels.txt");}
+        try{MMH.importLevelindex("Zone/TestZone/Levels.txt");}//CHANGE THIS TO CURRENT GAME LATER
       catch(Exception E){rect(200,200,200,200);}
       MMH.displayMapMenu();
     }

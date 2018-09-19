@@ -7,16 +7,19 @@ public class MapMenuHandler
    
    public void importLevelindex(String filename)
    {
+     
      levelIndexes = new ArrayList<LevelIndex>();
-     File file = new File(filename);
      try{
-     Scanner scan = new Scanner(file);
-     while(scan.hasNextLine())
+     BufferedReader scan = createReader(filename);
+     String aaa;
+     aaa = scan.readLine();
+     while(aaa != null)
      {
-       levelIndexes.add(new LevelIndex(scan.nextLine()));
+       levelIndexes.add(new LevelIndex(aaa));
+       aaa = scan.readLine();
      }
      scan.close();
-     }catch(Exception E){};
+     }catch(Exception E){exit();}
    }
 
 
@@ -32,6 +35,16 @@ public class MapMenuHandler
     else if(menuMapY>768){menuMapY=768;} // Min and max XY locations.
     
     image(menuMap,menuMapX-512,menuMapY-256);
+    /*if(levelIndexes==null)
+    {rect(50,50,50,50);}*/
+    /*if(levelIndexes.size()==0)
+    {rect(50,50,50,50);}*/
+    
+    
+    for(int i = 0; i < levelIndexes.size(); i++)
+    {
+      levelIndexes.get(i).display(menuMapX,menuMapY);
+    }
     
     fill(150);//shade of gray
     rect(900,350,200,50);
