@@ -1,7 +1,8 @@
 public class MapMenuHandler
 {
    int menuMapX = 0, menuMapY = 0;
-   ArrayList<LevelIndex> levelIndexes; 
+   ArrayList<LevelIndex> levelIndexes;
+   LevelIndex currentLevel;
    String zone = "TestZone"; //Leave this as a default for errors. Actual zone should be loaded in. If the load fails, this will be the zone.
    PImage menuMap = loadImage("Zone/TestZone/Map.gif"); //Same as a above ^^^
    
@@ -19,11 +20,61 @@ public class MapMenuHandler
        aaa = scan.readLine();
      }
      scan.close();
+     if(currentLevel==null)
+       {
+         currentLevel=levelIndexes.get(0);
+         levelIndexes.get(0).setSelected(true);
+       }
      }catch(Exception E){exit();}
    }
-
-
-
+   
+   public void setCurrentLevel(int i)
+   {
+     try
+     {
+       for (int j = 0; j < levelIndexes.size(); j++)
+       {
+       if(levelIndexes.get(j).getID()==j)
+         {
+           
+           currentLevel.setSelected(false);
+           currentLevel=levelIndexes.get(j);
+           currentLevel.setSelected(true);
+           displayMapMenu();
+           j=j+100;
+         }
+       }
+     }catch(Exception E){}
+   }
+   
+   private void attemptMove(char a)
+   {
+    try
+    {
+      int index = -1, index2;
+      for(int i = 0; i < currentLevel.getExitSize(); i++)
+      {rect(50,50,50,50);
+        if(currentLevel.getExitLetter(i)==a){index=i;}
+      }
+      if(index!=-1)
+      {
+        index2=currentLevel.getExitID(index);
+        for(int i = 0; i < levelIndexes.size(); i++)
+        {
+          if(levelIndexes.get(i).getID()==index2)
+          {
+            if(!levelIndexes.get(i).getLocked()){setCurrentLevel(i);}
+          }
+        }
+      } 
+    }catch(Exception E){}
+   }
+   
+   public void key(char a)
+   {
+     attemptMove(a);
+   }
+   
    public void displayMapMenu()
   {
     //artist and UI people draw here//if anybody want to implement a custom drawn map, feel free

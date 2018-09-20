@@ -11,10 +11,12 @@ public class LevelIndex
   public int getX(){return X;}
   public int getY(){return Y;}
   public boolean getLocked(){return locked;}
-  public int getexitID(int i){return exitID[i];}
-  public char getexitLetter(int i){return exitLetter[i];}
+  public int getExitID(int i){return exitID[i];}
+  public char getExitLetter(int i){return exitLetter[i];}
+  public int getExitSize(){return exitLetter.length;}
   
   public void setLocked(Boolean locked){this.locked = locked;}
+  public void setSelected(Boolean selected){this.selected = selected;}
   
   public void display(int x, int y)
   {
@@ -26,6 +28,7 @@ public class LevelIndex
     vertex(X+x+15,Y+y+0);
     vertex(X+x+0,Y+y-15);
     vertex(X+x-15,Y+y+0);
+    vertex(X+x+0,Y+y+15);
     endShape();
   }
   
@@ -38,18 +41,20 @@ public class LevelIndex
     X = Integer.parseInt(sortedData[1]);
     Y = Integer.parseInt(sortedData[2]);
     locked = Boolean.parseBoolean(sortedData[3]);
-    
     tempData = sortedData[4].split("-");
     exitID = new int[tempData.length];
     for(int i = 0; i<tempData.length; i++)
     {
       exitID[i]=Integer.parseInt(tempData[i]);
+      System.out.println(exitID[i]);
     }
-    tempData = sortedData[4].split("-");
+    System.out.println(sortedData[5]);
+    tempData = sortedData[5].split("-");
+    System.out.println(tempData[0]);
     exitID = new int[tempData.length];
     for(int i = 0; i<tempData.length; i++)
     {
-      exitLetter[i]=(tempData[i]).charAt(0);
+      exitLetter[i]=(tempData[i].charAt(0));
     }
     }catch(Exception E){}
   }

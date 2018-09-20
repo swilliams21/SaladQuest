@@ -57,37 +57,6 @@ void mouseClicked()// Prexisting method in processing. It will be used for click
 }
 
 void keyPressed()//Prexisting method in processing. It will be used for game controls.
-{
-  //movement
-  if(gh.canMove())//change later for handler.canMove()//boolean
-  {
-  if(gh.mode().equals("Game"))
-   {
-    if(key == 'a')
-    {}
-    else if(key == 'd')
-    {}
-    else if(key == 'w')
-    {}
-    else if(key == 's')
-    {}
-    //other controls
-    else if(key == 'f')
-    {}
-    //numbers
-    else if(key == '1')
-    {}
-  }
-  if(gh.mode().equals("Map Menu"))
-  {
-    if(key == 'a')
-    {}
-    else if(key == 'd')
-    {}
-    else if(key == 'w')
-    {}
-    else if(key == 's')
-    {}
-  }
-  }
-}
+{gh.key(Character.toLowerCase(key));}
+void keyReleased()//Prexisting method in processing. It will be used for game controls.
+{gh.noKey(Character.toLowerCase(key));}

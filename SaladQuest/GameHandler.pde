@@ -4,7 +4,6 @@ import java.util.Scanner;
 import java.io.*;
 
 public class GameHandler{
-  Boolean canMove = false;
   String mode;
   MapMenuHandler MMH = new MapMenuHandler();
 
@@ -30,24 +29,25 @@ public class GameHandler{
   mode("Map Menu");
   }
   
-  Boolean canMove(){return canMove;}
-  void canMove(boolean b){canMove=b;}
   String mode(){return mode;}
   void mode(String m){
     mode=m;
     if(m.equals("Main Menu"))
     {
-      canMove(false);
       displayMainMenu();
     }
     else if(m.equals("Map Menu"))
     {
-      canMove(true);
-        try{MMH.importLevelindex("Zone/TestZone/Levels.txt");}//CHANGE THIS TO CURRENT GAME LATER
-      catch(Exception E){rect(200,200,200,200);}
+      try{MMH.importLevelindex("Zone/TestZone/Levels.txt");}//CHANGE THIS TO CURRENT GAME LATER
+      catch(Exception E){}
       MMH.displayMapMenu();
     }
   }
+  void key(char a)
+    {
+      if(mode.equals("Map Menu")){MMH.key(a);}
+    }
+  void noKey(char a){}
   
 
 }
