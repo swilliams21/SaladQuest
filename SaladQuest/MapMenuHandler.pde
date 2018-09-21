@@ -30,39 +30,31 @@ public class MapMenuHandler
    
    public void setCurrentLevel(int i)
    {
-     try
-     {
-       for (int j = 0; j < levelIndexes.size(); j++)
-       {
-       if(levelIndexes.get(j).getID()==j)
-         {
-           
-           currentLevel.setSelected(false);
-           currentLevel=levelIndexes.get(j);
-           currentLevel.setSelected(true);
-           displayMapMenu();
-           j=j+100;
-         }
-       }
-     }catch(Exception E){}
+     currentLevel.setSelected(false);
+     currentLevel=levelIndexes.get(i);
+     currentLevel.setSelected(true);
+     zone=currentLevel.getZone();
+     displayMapMenu();
    }
    
    private void attemptMove(char a)
    {
     try
     {
+      boolean check = true;
       int index = -1, index2;
       for(int i = 0; i < currentLevel.getExitSize(); i++)
-      {rect(50,50,50,50);
+      {
         if(currentLevel.getExitLetter(i)==a){index=i;}
       }
       if(index!=-1)
       {
         index2=currentLevel.getExitID(index);
-        for(int i = 0; i < levelIndexes.size(); i++)
+        for(int i = 0; i < levelIndexes.size()&&check; i++)
         {
           if(levelIndexes.get(i).getID()==index2)
           {
+            check=false;
             if(!levelIndexes.get(i).getLocked()){setCurrentLevel(i);}
           }
         }
@@ -77,15 +69,15 @@ public class MapMenuHandler
    
    public void displayMapMenu()
   {
-    //artist and UI people draw here//if anybody want to implement a custom drawn map, feel free
     background(0);
-    
+     menuMapX = currentLevel.getX();
+     menuMapY = currentLevel.getY();
     if(menuMapX<512){menuMapX=512;}
     else if(menuMapX>1536){menuMapX=1536;}
     if(menuMapY<256){menuMapY=256;}
     else if(menuMapY>768){menuMapY=768;} // Min and max XY locations.
     
-    image(menuMap,menuMapX-512,menuMapY-256);
+    image(menuMap,-menuMapX+512,-menuMapY+256);//update later to adjuster loaded from file
     /*if(levelIndexes==null)
     {rect(50,50,50,50);}*/
     /*if(levelIndexes.size()==0)
@@ -94,7 +86,10 @@ public class MapMenuHandler
     
     for(int i = 0; i < levelIndexes.size(); i++)
     {
-      levelIndexes.get(i).display(menuMapX,menuMapY);
+      if(levelIndexes.get(i).getZone().matches(zone))
+      {
+        levelIndexes.get(i).display(menuMapX,menuMapY);
+      }
     }
     
     fill(150);//shade of gray

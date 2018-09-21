@@ -24,8 +24,10 @@ public class GameHandler{
   }
 
   
-  public void newGame()
+  public void LoadGame(String fileLocation)
   {
+  
+  MMH.importLevelindex(fileLocation+"/Levels.txt");
   mode("Map Menu");
   }
   
@@ -38,8 +40,8 @@ public class GameHandler{
     }
     else if(m.equals("Map Menu"))
     {
-      try{MMH.importLevelindex("Zone/TestZone/Levels.txt");}//CHANGE THIS TO CURRENT GAME LATER
-      catch(Exception E){}
+      //try{MMH.importLevelindex("Zone/TestZone/Levels.txt");}//CHANGE THIS TO CURRENT GAME LATER
+      //catch(Exception E){}
       MMH.displayMapMenu();
     }
   }

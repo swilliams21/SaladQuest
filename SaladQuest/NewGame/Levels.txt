@@ -1,0 +1,9 @@
+1,50,100,FALSE,2-3-8,d-s-w,TestZone
+2,100,100,TRUE,1-5,a-d,TestZone
+3,50,200,FALSE,1-4,w-d,TestZone
+4,500,200,FALSE,3-6-7,a-d-s,TestZone
+5,200,100,TRUE,2,a,TestZone
+6,600,200,FALSE,4,a,TestZone
+7,500,400,FALSE,4,w,TestZone
+8,400,400,FALSE,1-9,s-w,Example
+9,400,300,FALSE,8,s,Example

@@ -26,6 +26,7 @@ void mouseClicked()// Prexisting method in processing. It will be used for click
   {
     if((mouseY>375&&mouseY<425)&&(mouseX>156&&mouseX<356))//New Game
     {
+      gh.LoadGame("NewGame");
       gh.mode("Map Menu");
     }
     else if((mouseY>375&&mouseY<425)&&(mouseX>412&&mouseX<612))//Button 2
