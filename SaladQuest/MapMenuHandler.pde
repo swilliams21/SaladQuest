@@ -34,6 +34,7 @@ public class MapMenuHandler
      currentLevel=levelIndexes.get(i);
      currentLevel.setSelected(true);
      zone=currentLevel.getZone();
+     menuMap = loadImage("Zone/"+zone+"/Map.gif");
      displayMapMenu();
    }
    

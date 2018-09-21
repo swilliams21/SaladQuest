@@ -32,7 +32,23 @@ public class LevelIndex
     vertex(X-15+512-x,Y+0+256-y);
     vertex(X+0+512-x,Y+15+256-y);
     endShape();
-    System.out.println(ID+","+X+","+Y+","+selected+","+locked);
+    fill(0);
+    if(selected)
+    for(int i = 0; i < getExitSize(); i++)
+    {
+      if(exitLetter[i]=='w'){text("W",X-10+512-x,Y-10+256-y);}
+      else if(exitLetter[i]=='a'){text("A",X-25+512-x,Y+10+256-y);}
+      else if(exitLetter[i]=='s'){text("S",X-10+512-x,Y+30+256-y);}
+      else if(exitLetter[i]=='d'){text("D",X+15+512-x,Y+10+256-y);}
+      else if(exitLetter[i]=='q'){text("Q",X-25+512-x,Y-10+256-y);}
+      else if(exitLetter[i]=='e'){text("E",X+15+512-x,Y-10+256-y);}
+      else if(exitLetter[i]=='z'){text("Z",X-25+512-x,Y+30+256-y);}
+      else if(exitLetter[i]=='x'){text("X",X+15+512-x,Y+30+256-y);}
+      else if(exitLetter[i]=='f'){text("F",X+0+512-x,Y+0+256-y);}
+      else if(exitLetter[i]=='r'){text("R",X+0+512-x,Y+0+256-y);}
+      else{text(exitLetter[i],X+0+512-x,Y+0+256-y);}
+    }
+    //System.out.println(ID+","+X+","+Y+","+selected+","+locked+","+zone);
   }
   
   public LevelIndex(String data)
