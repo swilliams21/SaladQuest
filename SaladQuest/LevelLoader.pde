@@ -5,7 +5,7 @@ public class Level
   Float focusX = 0.0;
   Float focusY = 0.0;
   Float widthX = 0.0; // variable names look 'dumb' to avoid copying preexisting built in "width" and "height"
-  Float heightY = 0.0;
+  Float heightY = 20.0;
   public Level(String file)
   {
     map = new ArrayList<ArrayList<Entity>>();
@@ -13,15 +13,24 @@ public class Level
   }
   void display()
   {
-     /*menuMapX = currentLevel.getX();
-     menuMapY = currentLevel.getY();
-    if(menuMapX<512){menuMapX=512;}
-    else if(menuMapX>1536){menuMapX=1536;}
-    if(menuMapY<256){menuMapY=256;}
-    else if(menuMapY>768){menuMapY=768;} // Min and max XY locations.*/
+
+    if(focusX-8<-7){focusX=-7.0;}//fix this later
+    else if(focusX>1536){focusX=1536.0;}//fix this later
+    if(focusY<3){focusY=3.0;}//fix this later
+    else if(focusY>768.0){focusY=0.0;} //fix this later //Min and max XY locations.
     pushMatrix();
-    translate((focusX*64)+512, 256-(heightY*64)-(focusY*64));
-    image(background, 0, 0);//update later to adjuster loaded from file
+    translate((focusX*64)+512, (256-(heightY*64))+(focusY*64));//this is mostly completely broken
+    image(background, 0, 0);
+    
+    for(int i = 0; i < map.size(); i++)
+    {
+      ArrayList<Entity> lineMap = map.get(i);
+      for(int j = 0; j < lineMap.size(); j++)
+      {
+        lineMap.get(j).display();
+      }
+    }
+    
     popMatrix();
   }
   void update()
