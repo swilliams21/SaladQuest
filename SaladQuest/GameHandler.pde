@@ -2,10 +2,10 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.*;
-
 public class GameHandler{
   String mode;
   MapMenuHandler MMH = new MapMenuHandler();
+  Level LL = null;
 
   public void displayMainMenu()
   {
@@ -44,12 +44,28 @@ public class GameHandler{
       //catch(Exception E){}
       MMH.displayMapMenu();
     }
+    if(m.equals("Level"))
+    {
+      int i = MMH.getCurrentLevel().getID();
+      String level = ""+i;
+      LL = new Level(level);
+      background(100);
+    }
   }
   void key(char a)
     {
       if(mode.equals("Map Menu")){MMH.key(a);}
     }
-  void noKey(char a){}
-  
-
+  void noKey(char a)
+    { 
+      if(mode.equals("")){MMH.key(a);}
+    }
+  void tick()
+    {
+      if (mode.equals("Level"))
+      {
+        LL.update();
+        LL.display();
+      }
+    }
 }

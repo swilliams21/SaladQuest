@@ -1,0 +1,4 @@
+CommonEntity/InvisbleWall.txt
+CommonEntity/BlockCommon.txt
+CommonEntity/Air.txt
+Levels/1/LocalEntity/Exit.txt

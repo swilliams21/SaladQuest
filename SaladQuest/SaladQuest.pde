@@ -15,9 +15,8 @@ void setup()//Prexisting method in processing. It will be used for initial load.
 
 void draw()//Prexisting method in processing. It will be used as an updater.
 {
+  gh.tick();
   //time based updater method
-  
-  
 }
 
 void mouseClicked()// Prexisting method in processing. It will be used for clicking on buttons or dialogue.
@@ -43,7 +42,7 @@ void mouseClicked()// Prexisting method in processing. It will be used for click
   {
     if((mouseY>325&&mouseY<375)&&(mouseX>800&&mouseX<1000))//New Game
     {
-      fill(0,255,0);rect(50,50,50,50);//test code. Delete when replaced
+      gh.mode("Level");
     }
     else if((mouseY>375&&mouseY<425)&&(mouseX>800&&mouseX<1000))//Button 2
     {

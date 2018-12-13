@@ -28,6 +28,11 @@ public class MapMenuHandler
      }catch(Exception E){exit();}
    }
    
+   public LevelIndex getCurrentLevel()
+   {
+     return currentLevel;
+   }
+   
    public void setCurrentLevel(int i)
    {
      currentLevel.setSelected(false);

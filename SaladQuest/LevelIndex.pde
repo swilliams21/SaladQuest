@@ -7,7 +7,6 @@ public class LevelIndex
   private int[] exitID;
   private char[] exitLetter;
   private String zone;
-  
   public int getID(){return ID;}
   public int getX(){return X;}
   public int getY(){return Y;}
@@ -46,7 +45,7 @@ public class LevelIndex
       else if(exitLetter[i]=='x'){text("X",X+15+512-x,Y+30+256-y);}
       else if(exitLetter[i]=='f'){text("F",X+0+512-x,Y+0+256-y);}
       else if(exitLetter[i]=='r'){text("R",X+0+512-x,Y+0+256-y);}
-      else{text(exitLetter[i],X+0+512-x,Y+0+256-y);}
+      else{text(exitLetter[i],X+0+512-x,Y+0+256-y);}  
     }
     //System.out.println(ID+","+X+","+Y+","+selected+","+locked+","+zone);
   }
