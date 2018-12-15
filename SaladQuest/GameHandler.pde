@@ -1,7 +1,5 @@
 //From an MVC point of view, this class acts like a Central "Model" and has Functions of a View
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.io.*;
+
 public class GameHandler{
   String mode;
   MapMenuHandler MMH = new MapMenuHandler();

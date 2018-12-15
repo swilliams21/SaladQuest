@@ -1,5 +1,3 @@
-import java.util.Scanner;
-import java.io.*;
 
 //from an MVC point of view this class acts as a Controller and Initiailizer
 

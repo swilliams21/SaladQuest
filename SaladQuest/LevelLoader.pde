@@ -7,6 +7,7 @@ public class Level
   Float focusY = 0.0;
   Float widthX = 0.0; // variable names look 'dumb' to avoid copying preexisting built in "width" and "height"
   Float heightY = 0.0;
+  float scale = 64.0;
   public Level(String file)
   {
     map = new ArrayList<ArrayList<TerreignEntity>>();
@@ -14,7 +15,7 @@ public class Level
     background = loadImage("Levels/"+file+"/"+"Background.gif");
     BufferedReader scanMapIndex = createReader("Levels/"+file+"/"+"TerriegnEntities.txt");
     BufferedReader scanMap = createReader("Levels/"+file+"/"+"Map.txt");
-    BufferedReader scanLH = createReader("Levels/"+file+"/"+"LH.txt");
+    BufferedReader scanLHS = createReader("Levels/"+file+"/"+"LengthHeightScale.txt");
     BufferedReader scanSpawn = createReader("Levels/"+file+"/"+"SpawnLocation.txt");
     try
     {
@@ -29,8 +30,9 @@ public class Level
         data = scanMapIndex.readLine();
       }
       
-      widthX = (float)Integer.parseInt(scanLH.readLine());
-      heightY = (float)Integer.parseInt(scanLH.readLine());
+      widthX = (float)Integer.parseInt(scanLHS.readLine());
+      heightY = (float)Integer.parseInt(scanLHS.readLine());
+      scale = (float)Integer.parseInt(scanLHS.readLine());
       
       data = scanMap.readLine();
       
@@ -62,25 +64,24 @@ public class Level
     
     pushMatrix();
     translate(width/2, height/2);
-    translate(0, -heightY*64);
-    translate(-(focusX*64), (focusY*64));//this is mostly completely broken
+    translate(0, -heightY*scale);
+    translate(-(focusX*scale), (focusY*scale));//this is mostly completely broken
     image(background, 0, 0);
     popMatrix();
     pushMatrix();
-    translate(width/2, height/2-64);
-    translate(-(focusX*64), (focusY*64));
+    translate(width/2, height/2-scale);
+    translate(-(focusX*64), (focusY*scale));
     for(int i = 0; i < map.size(); i++)
     {
       ArrayList<TerreignEntity> lineMap = map.get(i);
       pushMatrix();
-      
-      
       for(int j = 0; j < lineMap.size(); j++)
       {
         lineMap.get(j).display();
-        translate(0,-64);
+        translate(0,-scale);
       }
       popMatrix();
+      translate(scale,0);
     }
     popMatrix();
   }
