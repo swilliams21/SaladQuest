@@ -1,0 +1,3 @@
+CommonEntity/Unit/Player/Stand/StandImage.txt
+CommonEntity/Unit/Player/Stand/StandFrameIndex.txt
+0

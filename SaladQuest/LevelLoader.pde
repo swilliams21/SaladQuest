@@ -7,12 +7,13 @@ public class Level
   Float focusY = 0.0;
   Float widthX = 0.0; // variable names look 'dumb' to avoid copying preexisting built in "width" and "height"
   Float heightY = 0.0;
-  float scale = 64.0;
+  float scale = 0.0;
+  UnitAnimation a = new UnitAnimation("CommonEntity/Unit/Player/Stand/Stand.txt");
   public Level(String file)
   {
     map = new ArrayList<ArrayList<TerreignEntity>>();
     mapIndex = new ArrayList<TerreignEntity>();
-    background = loadImage("Levels/"+file+"/"+"Background.gif");
+    background = loadImage("Levels/"+file+"/"+"Background.png");
     BufferedReader scanMapIndex = createReader("Levels/"+file+"/"+"TerriegnEntities.txt");
     BufferedReader scanMap = createReader("Levels/"+file+"/"+"Map.txt");
     BufferedReader scanLHS = createReader("Levels/"+file+"/"+"LengthHeightScale.txt");
@@ -46,7 +47,6 @@ public class Level
         {
           int k = Integer.parseInt(datas[j]);
           column.add(mapIndex.get(k));
-          println(k);
         }
         map.add(column);
         data = scanMap.readLine();
@@ -84,6 +84,9 @@ public class Level
       translate(scale,0);
     }
     popMatrix();
+    
+    
+    a.display(30,30);
   }
   void update()
   {
@@ -141,8 +144,74 @@ public class TerreignEntity extends Entity
 
 public class Unit extends Entity
 {
+  float centerX, centerY;
+  float widthX, HeightY;
   @Override
-  void display(){}
+  void display(){print("this is coded wrong");}
   @Override
   void display(int x, int y){}
+}
+
+public class UnitAnimation
+{
+  String name;
+  int counter;
+  int base = 0;
+  ArrayList<PImage> frame = new ArrayList<PImage>();
+  public UnitAnimation(String fileLocation)
+  {
+    String frameLocation, frameIndex, data;
+    counter = 0;
+    try{
+      ArrayList<PImage> tempList = new ArrayList<PImage>();
+      BufferedReader scan = createReader(fileLocation);
+      frameLocation = scan.readLine();
+      frameIndex = scan.readLine();
+      BufferedReader scanLocation = createReader(frameLocation);
+      BufferedReader scanIndex = createReader(frameIndex);
+      data = scanLocation.readLine();
+      while(data!=null)
+      {
+        PImage picture = loadImage(data);
+        tempList.add(picture);
+        data = scanLocation.readLine();
+      }
+      data = scanIndex.readLine();
+      while(data!=null)
+      {
+        int i = Integer.parseInt(data);
+        frame.add(tempList.get(i));
+        data = scanIndex.readLine();
+      }
+    }catch(Exception e){print("animation read error");}
+  }
+  public String checkName()
+  {
+    return name;
+  }
+  public void resetCounter()
+  {
+    counter = 0;
+  }
+  public void display(int x, int y)
+  {
+    PImage picture = frame.get(counter);
+    image(picture, x, y);
+    counter++;
+    if (counter >= frame.size())
+    {
+      counter = base;
+    }
+  }
+}
+public class point
+{
+  float x, y;
+  public point(float x, float y)
+  {
+    this.x = x;
+    this.y = y;
+  }
+  public float getX(){return x;}
+  public float getY(){return y;}
 }

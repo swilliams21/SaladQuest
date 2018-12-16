@@ -9,6 +9,7 @@ void setup()//Prexisting method in processing. It will be used for initial load.
   rectMode(CENTER);
   textMode(CENTER);
   gh.mode("Main Menu");
+  frameRate(30);
 }
 
 void draw()//Prexisting method in processing. It will be used as an updater.
