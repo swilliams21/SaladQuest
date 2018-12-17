@@ -1,0 +1,2 @@
+CommonEntity/Unit/Player/AnimationIndex.txt
+CommonEntity/Unit/Player/LengthWidth.txt

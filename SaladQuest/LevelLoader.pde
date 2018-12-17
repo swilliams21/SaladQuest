@@ -2,29 +2,31 @@ public class Level
 {
   ArrayList<ArrayList<TerreignEntity>> map;
   ArrayList<TerreignEntity> mapIndex;
+  ArrayList<Unit> units;
   PImage background;
-  Float focusX = 0.0;
-  Float focusY = 0.0;
-  Float widthX = 0.0; // variable names look 'dumb' to avoid copying preexisting built in "width" and "height"
-  Float heightY = 0.0;
+  float focusX = 0.0;
+  float focusY = 0.0;
+  float widthX = 0.0; // variable names look 'dumb' to avoid copying preexisting built in "width" and "height"
+  float heightY = 0.0;
+  float spawnX = 0.0;
+  float spawnY = 0.0;
   float scale = 0.0;
-  UnitAnimation a = new UnitAnimation("CommonEntity/Unit/Player/Stand/Stand.txt");
   public Level(String file)
   {
     map = new ArrayList<ArrayList<TerreignEntity>>();
     mapIndex = new ArrayList<TerreignEntity>();
+    units = new ArrayList<Unit>();
     background = loadImage("Levels/"+file+"/"+"Background.png");
     BufferedReader scanMapIndex = createReader("Levels/"+file+"/"+"TerriegnEntities.txt");
     BufferedReader scanMap = createReader("Levels/"+file+"/"+"Map.txt");
     BufferedReader scanLHS = createReader("Levels/"+file+"/"+"LengthHeightScale.txt");
     BufferedReader scanSpawn = createReader("Levels/"+file+"/"+"SpawnLocation.txt");
+    // add code for units and events scripts
     try
     {
       String data = scanMapIndex.readLine();
       while(data != null)
       {
-        /*print("data: ");
-        println(data);*/
         BufferedReader temp = createReader(data);
         data = temp.readLine();
         mapIndex.add(new TerreignEntity(data));
@@ -51,6 +53,10 @@ public class Level
         map.add(column);
         data = scanMap.readLine();
       }
+    float x = scale*((float)Integer.parseInt(scanSpawn.readLine())+.501);
+    float y = scale*((float)Integer.parseInt(scanSpawn.readLine())+.501);
+    Unit player = new Unit("CommonEntity/Unit/Player/Player.txt", x, y);
+    units.add(player);
     }catch(Exception e){print("error");}
     
   }
@@ -84,13 +90,18 @@ public class Level
       translate(scale,0);
     }
     popMatrix();
-    
-    
-    a.display(30,30);
+    pushMatrix();
+    translate(width/2, height/2);
+    translate(-focusX*scale, focusY*scale);
+    for(int i = 0; i < units.size(); i++)
+    {
+      units.get(i).display();
+    }
+    popMatrix();
   }
   void update()
   {
-    
+    //this is where physics are called
   }
 }
 
@@ -145,11 +156,40 @@ public class TerreignEntity extends Entity
 public class Unit extends Entity
 {
   float centerX, centerY;
-  float widthX, HeightY;
+  float widthX, heightY;
+  ArrayList<UnitAnimation> animations;
+  UnitAnimation currentAnimation;
+  public Unit(String fileLocation, float centerX, float centerY)
+  {
+    try
+    {
+      this.centerX = centerX;
+      this.centerY = centerY;
+      String data, name, file;
+      animations = new ArrayList<UnitAnimation>();
+      BufferedReader scanUnitIndex = createReader(fileLocation);
+      data = scanUnitIndex.readLine();
+      BufferedReader scanAnimation = createReader(data);
+      name = scanAnimation.readLine();
+      file = scanAnimation.readLine();
+      while(file!=null)
+      {
+        animations.add(new UnitAnimation(name, file));
+        name = scanAnimation.readLine();
+        file = scanAnimation.readLine();
+      }
+      currentAnimation = animations.get(0);
+      data = scanUnitIndex.readLine();
+      BufferedReader scanWidthHeight = createReader(data);
+      widthX = (float)Integer.parseInt(scanWidthHeight.readLine());
+      heightY = (float)Integer.parseInt(scanWidthHeight.readLine());
+      
+    }catch(Exception e){print("file read error");}
+  }
   @Override
-  void display(){print("this is coded wrong");}
+  void display(){currentAnimation.display(centerX-widthX/2, -(centerY+heightY/2));}
   @Override
-  void display(int x, int y){}
+  void display(int x, int y){print("this is coded wrong");}
 }
 
 public class UnitAnimation
@@ -158,11 +198,12 @@ public class UnitAnimation
   int counter;
   int base = 0;
   ArrayList<PImage> frame = new ArrayList<PImage>();
-  public UnitAnimation(String fileLocation)
+  public UnitAnimation(String name, String fileLocation)
   {
     String frameLocation, frameIndex, data;
     counter = 0;
     try{
+      this.name = name;
       ArrayList<PImage> tempList = new ArrayList<PImage>();
       BufferedReader scan = createReader(fileLocation);
       frameLocation = scan.readLine();
@@ -185,7 +226,7 @@ public class UnitAnimation
       }
     }catch(Exception e){print("animation read error");}
   }
-  public String checkName()
+  public String getName()
   {
     return name;
   }
@@ -193,7 +234,7 @@ public class UnitAnimation
   {
     counter = 0;
   }
-  public void display(int x, int y)
+  public void display(float x, float y)
   {
     PImage picture = frame.get(counter);
     image(picture, x, y);
