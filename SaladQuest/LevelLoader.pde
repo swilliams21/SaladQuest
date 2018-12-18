@@ -1,8 +1,11 @@
+import java.util.HashSet;
 public class Level
 {
   ArrayList<ArrayList<TerreignEntity>> map;
   ArrayList<TerreignEntity> mapIndex;
   ArrayList<Unit> units;
+  HashSet<Character> keys;
+  Player player;
   PImage background;
   float focusX = 0.0;
   float focusY = 0.0;
@@ -11,11 +14,13 @@ public class Level
   float spawnX = 0.0;
   float spawnY = 0.0;
   float scale = 0.0;
+  boolean paused = true;
   public Level(String file)
   {
     map = new ArrayList<ArrayList<TerreignEntity>>();
     mapIndex = new ArrayList<TerreignEntity>();
     units = new ArrayList<Unit>();
+    keys = new HashSet<Character>();
     background = loadImage("Levels/"+file+"/"+"Background.png");
     BufferedReader scanMapIndex = createReader("Levels/"+file+"/"+"TerriegnEntities.txt");
     BufferedReader scanMap = createReader("Levels/"+file+"/"+"Map.txt");
@@ -55,19 +60,21 @@ public class Level
       }
     float x = scale*((float)Integer.parseInt(scanSpawn.readLine())+.501);
     float y = scale*((float)Integer.parseInt(scanSpawn.readLine())+.501);
-    Unit player = new Unit("CommonEntity/Unit/Player/Player.txt", x, y);
+    player = new Player("CommonEntity/Unit/Player/Player.txt", x, y);//update this later
     units.add(player);
     }catch(Exception e){print("error");}
-    
+    paused = false;
   }
   void display()
   {
+    Point p = player.getPoint();
+    focus(p);
 
     if(focusX<7.5){focusX=7.5;}
-    else if(focusX>1536){focusX=1536.0;}//fix this later
+    else if(focusX>widthX-7.5){focusX=widthX-7.5;}//fix this later
     if(focusY<3.5){focusY=3.5;}
-    else if(focusY>768.0){focusY=0.0;} //fix this later //Min and max XY locations.
-    
+    else if(focusY>heightY-3.5){focusY=heightY-3.5;} //fix this later //Min and max XY locations.
+    background(0);
     pushMatrix();
     translate(width/2, height/2);
     translate(0, -heightY*scale);
@@ -99,9 +106,48 @@ public class Level
     }
     popMatrix();
   }
+  void focus(Point p)
+  {
+    focusX = p.getX()/scale;
+    focusY = p.getY()/scale;
+  }
   void update()
   {
-    //this is where physics are called
+    if(!paused)
+    {
+      //this is where physics are called
+      for(int i = 0; i < units.size(); i++)
+      {
+        move(units.get(i));
+      }
+    }
+  }
+  void move(Unit unit)
+  {
+    if (canMove(unit))
+    {
+      unit.move();
+    }
+  }
+  boolean canMove(Unit unit)
+  {
+    if(false)//change later
+    {
+      return false;
+    }
+    return true;
+  }
+  void key(char a)
+  {
+    keys.add(a);
+    print(a);
+  }
+  void noKey(char a)
+  {
+    try
+    {
+      keys.remove(a);
+    }catch(Exception e){print("KEY ERROR. STOP PLAYING WITH THE KEYBOARD");}
   }
 }
 
@@ -155,8 +201,12 @@ public class TerreignEntity extends Entity
 
 public class Unit extends Entity
 {
+  float velocityX, velocityY;
+  float gravityX, gravityY;
   float centerX, centerY;
   float widthX, heightY;
+  float moveSpeed, jumpSpeed;
+  boolean onGround = false;
   ArrayList<UnitAnimation> animations;
   UnitAnimation currentAnimation;
   public Unit(String fileLocation, float centerX, float centerY)
@@ -165,6 +215,12 @@ public class Unit extends Entity
     {
       this.centerX = centerX;
       this.centerY = centerY;
+      velocityX = 0;
+      velocityY = 0;
+      gravityX = 0;
+      gravityY = 1;
+      moveSpeed = 1;
+      jumpSpeed = 2;
       String data, name, file;
       animations = new ArrayList<UnitAnimation>();
       BufferedReader scanUnitIndex = createReader(fileLocation);
@@ -186,10 +242,28 @@ public class Unit extends Entity
       
     }catch(Exception e){print("file read error");}
   }
+  Point getPoint(){return new Point(centerX, centerY);}
+  float getCenterX(){return centerX;}
+  float getCenterY(){return centerY;} // redundancy exists for ease of use
+  float getVelocityX(){return velocityX;}
+  float getVelocityY(){return velocityY;}
+  void move()
+  {
+    centerX = centerX + velocityX;
+    centerY = centerY + velocityY;
+  }
   @Override
   void display(){currentAnimation.display(centerX-widthX/2, -(centerY+heightY/2));}
   @Override
-  void display(int x, int y){print("this is coded wrong");}
+  void display(int x, int y){currentAnimation.display(x, y);}
+}
+
+public class Player extends Unit
+{
+  public Player(String fileLocation, float centerX, float centerY)
+  {
+    super(fileLocation, centerX, centerY);
+  }
 }
 
 public class UnitAnimation
@@ -245,10 +319,10 @@ public class UnitAnimation
     }
   }
 }
-public class point
+public class Point
 {
   float x, y;
-  public point(float x, float y)
+  public Point(float x, float y)
   {
     this.x = x;
     this.y = y;

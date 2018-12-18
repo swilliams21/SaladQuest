@@ -53,10 +53,11 @@ public class GameHandler{
   void key(char a)
     {
       if(mode.equals("Map Menu")){MMH.key(a);}
+      else if(mode.equals("Level")){LL.key(a);}
     }
   void noKey(char a)
     { 
-      if(mode.equals("")){MMH.key(a);}
+      if(mode.equals("Level")){LL.noKey(a);}
     }
   void tick()
     {
