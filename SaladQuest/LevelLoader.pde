@@ -115,9 +115,11 @@ public class Level
   {
     if(!paused)
     {
+      player.playerControl();
       //this is where physics are called
       for(int i = 0; i < units.size(); i++)
       {
+        units.get(i).gravity();
         move(units.get(i));
       }
     }
@@ -137,18 +139,8 @@ public class Level
     }
     return true;
   }
-  void key(char a)
-  {
-    keys.add(a);
-    print(a);
-  }
-  void noKey(char a)
-  {
-    try
-    {
-      keys.remove(a);
-    }catch(Exception e){print("KEY ERROR. STOP PLAYING WITH THE KEYBOARD");}
-  }
+  void key(char a){player.key(a);}
+  void noKey(char a){player.noKey(a);}
 }
 
 public abstract class Entity implements Cloneable
@@ -205,8 +197,10 @@ public class Unit extends Entity
   float gravityX, gravityY;
   float centerX, centerY;
   float widthX, heightY;
-  float moveSpeed, jumpSpeed;
-  boolean onGround = false;
+  float moveSpeed, jumpSpeed, airSpeed;
+  boolean onGround = true;
+  boolean reversible = true;
+  boolean right = true;
   ArrayList<UnitAnimation> animations;
   UnitAnimation currentAnimation;
   public Unit(String fileLocation, float centerX, float centerY)
@@ -218,9 +212,10 @@ public class Unit extends Entity
       velocityX = 0;
       velocityY = 0;
       gravityX = 0;
-      gravityY = 1;
-      moveSpeed = 1;
-      jumpSpeed = 2;
+      gravityY = 2;
+      moveSpeed = 10;
+      jumpSpeed = 25;
+      airSpeed = 1;
       String data, name, file;
       animations = new ArrayList<UnitAnimation>();
       BufferedReader scanUnitIndex = createReader(fileLocation);
@@ -247,10 +242,49 @@ public class Unit extends Entity
   float getCenterY(){return centerY;} // redundancy exists for ease of use
   float getVelocityX(){return velocityX;}
   float getVelocityY(){return velocityY;}
+  void setVelocityX(float velocityX){this.velocityX=velocityX;}
+  void setVelocityY(float velocityY){this.velocityY=velocityY;}
   void move()
   {
     centerX = centerX + velocityX;
     centerY = centerY + velocityY;
+  }
+  void unitControl(boolean left, boolean right, boolean up)
+  {
+    if(!(left || right))
+    {
+      if(onGround){velocityX = 0;}
+    }
+    else
+    {
+      if(left)
+      {
+        if(onGround){velocityX = -moveSpeed;}
+        else if(velocityX > -moveSpeed){velocityX = velocityX - moveSpeed;}
+      }
+      if(right)
+      {
+        if(onGround){velocityX = moveSpeed;}
+        else if(velocityX < moveSpeed){velocityX = velocityX + moveSpeed;}
+      }
+    }
+    if(up){jump();}
+  }
+  void gravity()
+  {
+    if(!onGround)
+    {
+      velocityY = velocityY - gravityY;
+      velocityX = velocityX - gravityX;
+    }
+  }
+  void jump()
+  {
+    if(onGround)
+    {
+      onGround = false;
+      velocityY = jumpSpeed;
+    }
   }
   @Override
   void display(){currentAnimation.display(centerX-widthX/2, -(centerY+heightY/2));}
@@ -260,9 +294,28 @@ public class Unit extends Entity
 
 public class Player extends Unit
 {
+  boolean keyLeft = false;
+  boolean keyRight = false;
+  boolean keyUp = false; // add more booleans for more controls
   public Player(String fileLocation, float centerX, float centerY)
   {
     super(fileLocation, centerX, centerY);
+  }
+  void key(char a)
+  {
+    if(a=='a'){keyLeft=true;}
+    else if(a=='d'){keyRight=true;}
+    else if(a=='w'){keyUp=true;}
+  }
+  void noKey(char a)
+  {
+    if(a=='a'){keyLeft=false;}
+    else if(a=='d'){keyRight=false;}
+    else if(a=='w'){keyUp=false;}
+  }
+  void playerControl()
+  {
+    unitControl(keyLeft, keyRight, keyUp);
   }
 }
 
