@@ -4,6 +4,7 @@ public class GameHandler{
   String mode;
   MapMenuHandler MMH = new MapMenuHandler();
   Level LL = null;
+  Player player;
 
   public void displayMainMenu()
   {
@@ -24,8 +25,8 @@ public class GameHandler{
   
   public void LoadGame(String fileLocation)
   {
-  
   MMH.importLevelindex(fileLocation+"/Levels.txt");
+  player = new Player(fileLocation+"/Player.txt", 0, 0);
   mode("Map Menu");
   }
   
@@ -46,7 +47,7 @@ public class GameHandler{
     {
       int i = MMH.getCurrentLevel().getID();
       String level = ""+i;
-      LL = new Level(level);
+      LL = new Level(level, player);
       background(100);
     }
   }

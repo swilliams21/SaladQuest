@@ -15,7 +15,7 @@ public class Level
   float spawnY = 0.0;
   float scale = 0.0;
   boolean paused = true;
-  public Level(String file)
+  public Level(String file, Player  player)
   {
     map = new ArrayList<ArrayList<TerreignEntity>>();
     mapIndex = new ArrayList<TerreignEntity>();
@@ -60,7 +60,9 @@ public class Level
       }
     float x = scale*((float)Integer.parseInt(scanSpawn.readLine())+.501);
     float y = scale*((float)Integer.parseInt(scanSpawn.readLine())+.501);
-    player = new Player("CommonEntity/Unit/Player/Player.txt", x, y);//update this later
+    Point p = new Point(x,y);
+    this.player = player;
+    player.setPoint(p);
     units.add(player);
     }catch(Exception e){print("error");}
     paused = false;
@@ -126,18 +128,84 @@ public class Level
   }
   void move(Unit unit)
   {
-    if (canMove(unit))
+    if (canMoveX(unit))
     {
-      unit.move();
+      unit.moveX();
+    }
+    else
+    {
+      unit.setVelocityX(0);
+    }
+    if (canMoveY(unit))
+    {
+      unit.moveY();
+    }
+    else
+    {
+      if(unit.getVelocityY() < 0)
+      {
+        unit.setOnGround(true);
+      }
+      unit.setVelocityY(0);
     }
   }
-  boolean canMove(Unit unit)
+  boolean canMoveX(Unit unit)
   {
-    if(false)//change later
+    ArrayList<Point> points;// = unit.collisionPointsRight(scale);
+    if(unit.getVelocityX() > 0)
     {
-      return false;
+      points = unit.collisionPointsRight(scale);
+    }
+    else
+    {
+      points = unit.collisionPointsLeft(scale);
+    }
+    for(int i = 0; i < points.size(); i++)
+    {
+      Point p = points.get(i);
+      p.addX(unit.getVelocityX());
+      TerreignEntity t = getBlock(p);
+      if(!t.getPassable())
+      {
+        return false;
+      }
+      //print(p.getX());
     }
     return true;
+  }
+    boolean canMoveY(Unit unit)
+  {
+        ArrayList<Point> points;// = unit.collisionPointsRight(scale);
+    if(unit.getVelocityY() > 0)
+    {
+      points = unit.collisionPointsUp(scale);
+    }
+    else
+    {
+      points = unit.collisionPointsDown(scale);
+    }
+    for(int i = 0; i < points.size(); i++)
+    {
+      Point p = points.get(i);
+      p.addY(unit.getVelocityY());
+      TerreignEntity t = getBlock(p);
+      if(!t.getPassable())
+      {
+        return false;
+      }
+      //print(p.getX());
+    }
+    return true;
+  }
+  TerreignEntity getBlock(Point p)
+  {
+    int x = Math.round((p.getX() / scale)-.5);
+    int y = Math.round((p.getY() / scale)-.5);
+    //int y = 4;
+    //println(map.size());
+    println();
+    print(x+" "+y);
+    return map.get(x).get(y);
   }
   void key(char a){player.key(a);}
   void noKey(char a){player.noKey(a);}
@@ -173,6 +241,7 @@ public class TerreignEntity extends Entity
       }
     }
   }
+  boolean  getPassable(){return passable;}
   @Override
   void display()
   {
@@ -212,9 +281,9 @@ public class Unit extends Entity
       velocityX = 0;
       velocityY = 0;
       gravityX = 0;
-      gravityY = 2;
-      moveSpeed = 10;
-      jumpSpeed = 25;
+      gravityY = 1;
+      moveSpeed = 5;
+      jumpSpeed = 18;
       airSpeed = 1;
       String data, name, file;
       animations = new ArrayList<UnitAnimation>();
@@ -244,9 +313,78 @@ public class Unit extends Entity
   float getVelocityY(){return velocityY;}
   void setVelocityX(float velocityX){this.velocityX=velocityX;}
   void setVelocityY(float velocityY){this.velocityY=velocityY;}
-  void move()
+  void setOnGround(boolean ground){onGround = ground;}
+  void setPoint(Point p)
+  {
+   centerX = p.getX();
+   centerY = p.getY();
+  }
+  ArrayList<Point> collisionPointsRight(float scale)
+  {
+    ArrayList<Point> points = new ArrayList<Point>();
+    if(scale<heightY){}//future problem
+    else
+    {
+      float x, y;
+      x = centerX + (widthX/2);
+      y = centerY + (heightY/2);
+      points.add(new Point(x,y));
+      y = centerY - (heightY/2);
+      points.add(new Point(x,y));
+    }
+    return points;
+  }
+  ArrayList<Point> collisionPointsLeft(float scale)
+  {
+    ArrayList<Point> points = new ArrayList<Point>();
+    if(scale<heightY){}//future problem
+    else
+    {
+      float x, y;
+      x = centerX - (widthX/2);
+      y = centerY + (heightY/2);
+      points.add(new Point(x,y));
+      y = centerY - (heightY/2);
+      points.add(new Point(x,y));
+    }
+    return points;
+  }
+  ArrayList<Point> collisionPointsUp(float scale)
+  {
+    ArrayList<Point> points = new ArrayList<Point>();
+    if(scale<widthX){}//future problem
+    else
+    {
+      float x, y;
+      y = centerY + (heightY/2);
+      x = centerX + (widthX/2);
+      points.add(new Point(x,y));
+      x = centerX - (widthX/2);
+      points.add(new Point(x,y));
+    }
+    return points;
+  }
+  ArrayList<Point> collisionPointsDown(float scale)
+  {
+    ArrayList<Point> points = new ArrayList<Point>();
+    if(scale<widthX){}//future problem
+    else
+    {
+      float x, y;
+      y = centerY - (heightY/2);
+      x = centerX + (widthX/2);
+      points.add(new Point(x,y));
+      x = centerX - (widthX/2);
+      points.add(new Point(x,y));
+    }
+    return points;
+  }
+  void moveX()
   {
     centerX = centerX + velocityX;
+  }
+  void moveY()
+  {
     centerY = centerY + velocityY;
   }
   void unitControl(boolean left, boolean right, boolean up)
@@ -260,12 +398,12 @@ public class Unit extends Entity
       if(left)
       {
         if(onGround){velocityX = -moveSpeed;}
-        else if(velocityX > -moveSpeed){velocityX = velocityX - moveSpeed;}
+        else if(velocityX > -moveSpeed){velocityX = velocityX - airSpeed;}
       }
       if(right)
       {
         if(onGround){velocityX = moveSpeed;}
-        else if(velocityX < moveSpeed){velocityX = velocityX + moveSpeed;}
+        else if(velocityX < moveSpeed){velocityX = velocityX + airSpeed;}
       }
     }
     if(up){jump();}
@@ -380,6 +518,8 @@ public class Point
     this.x = x;
     this.y = y;
   }
+  public void addX(float i){x = x + i;}
+  public void addY(float i){y = y + i;}
   public float getX(){return x;}
   public float getY(){return y;}
 }
