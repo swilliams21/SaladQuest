@@ -134,19 +134,46 @@ public class Level
     }
     else
     {
-      unit.setVelocityX(0);
+      float i = unit.getVelocityX();
+      while(i > 1 || i < -1) // this is the simplisitic(easy math) way to improve unit collision but it also less ineficeient. Code can be used to improve this.
+      {
+        i = i/2;
+        unit.setVelocityX(i);
+        if(canMoveX(unit))
+        {
+          unit.moveX();
+        }
+      }
     }
     if (canMoveY(unit))
     {
       unit.moveY();
+      if(unit.getOnGround())
+      {
+        unit.setVelocityY(2);
+        if(canMoveY(unit))
+        {
+          unit.setOnGround(false);
+        }
+        unit.setVelocityY(0);
+      }
     }
     else
     {
+      float i = unit.getVelocityY();
       if(unit.getVelocityY() < 0)
       {
         unit.setOnGround(true);
       }
-      unit.setVelocityY(0);
+      while(i > 1 || i < -1) // this is the simplisitic(easy math) way to improve unit collision but it also less ineficeient. Code can be used to improve this.
+      {
+        i = i/2;
+        unit.setVelocityY(i);
+        if(canMoveY(unit))
+        {
+          unit.moveY();
+        }
+      }
     }
   }
   boolean canMoveX(Unit unit)
@@ -201,10 +228,6 @@ public class Level
   {
     int x = Math.round((p.getX() / scale)-.5);
     int y = Math.round((p.getY() / scale)-.5);
-    //int y = 4;
-    //println(map.size());
-    println();
-    print(x+" "+y);
     return map.get(x).get(y);
   }
   void key(char a){player.key(a);}
@@ -306,11 +329,13 @@ public class Unit extends Entity
       
     }catch(Exception e){print("file read error");}
   }
-  Point getPoint(){return new Point(centerX, centerY);}
+  
   float getCenterX(){return centerX;}
   float getCenterY(){return centerY;} // redundancy exists for ease of use
   float getVelocityX(){return velocityX;}
   float getVelocityY(){return velocityY;}
+  boolean getOnGround(){return onGround;}
+  Point getPoint(){return new Point(centerX, centerY);}
   void setVelocityX(float velocityX){this.velocityX=velocityX;}
   void setVelocityY(float velocityY){this.velocityY=velocityY;}
   void setOnGround(boolean ground){onGround = ground;}
