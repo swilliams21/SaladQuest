@@ -1,4 +1,5 @@
 CommonEntity/Terreign/InvisibleWall.txt
 CommonEntity/Terreign/GrassBlock64.txt
 CommonEntity/Terreign/Air.txt
+CommonEntity/Terreign/X64.txt
 Levels/1/LocalEntity/Exit.txt

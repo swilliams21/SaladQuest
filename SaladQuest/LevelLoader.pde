@@ -14,6 +14,8 @@ public class Level
   float spawnX = 0.0;
   float spawnY = 0.0;
   float scale = 0.0;
+  float gravityX = 0.0;
+  float gravityY = 1.0;
   boolean paused = true;
   public Level(String file, Player  player)
   {
