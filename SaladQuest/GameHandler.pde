@@ -6,7 +6,11 @@ public class GameHandler implements commandable
   MapMenuHandler MMH = new MapMenuHandler();
   Level LL = null;
   Player player;
-
+  
+  public GameHandler()
+  {
+    new BSHSingleton().getBogScriptHandler().setMapMenuHandler(MMH);
+  }
   public void displayMainMenu()
   {
     //artist and UI people draw here
@@ -49,6 +53,7 @@ public class GameHandler implements commandable
       int i = MMH.getCurrentLevel().getID();
       String level = ""+i;
       LL = new Level(level, player);
+      new BSHSingleton().getBogScriptHandler().setLevel(LL);
       background(100);
     }
   }
@@ -70,8 +75,9 @@ public class GameHandler implements commandable
       }
     }
   @Override
-  void processCommand()
+  void processCommand(String command)
   {
-    
+    String datas[] = command.split(">");
+    if (datas[0].equals("mode")){mode(datas[1]);}
   }
 }

@@ -17,6 +17,7 @@ public class Level implements commandable
   float gravityX = 0.0;
   float gravityY = 1.0;
   boolean paused = true;
+  Unit currentUnit; // mostly unused. It exists for future scripting with BogScript (example)(setcurrentunit>expectednumber deleteunit>expectednumber) It also updates on unit movement pre frame
   public Level(String file, Player  player)
   {
     map = new ArrayList<ArrayList<TerreignEntity>>();
@@ -130,6 +131,7 @@ public class Level implements commandable
   }
   void move(Unit unit)
   {
+    currentUnit = unit;
     if (canMoveX(unit))
     {
       unit.moveX();
@@ -177,6 +179,10 @@ public class Level implements commandable
         }
       }
     }
+    float x = unit.getCenterX();
+    float y = unit.getCenterY();
+    TerreignEntity t = getBlock(new Point(x,y));
+    t.runEvents();
   }
   boolean canMoveX(Unit unit)
   {
@@ -235,7 +241,7 @@ public class Level implements commandable
   void key(char a){player.key(a);}
   void noKey(char a){player.noKey(a);}
   @Override
-  void processCommand()
+  void processCommand(String command)
   {
     
   }
@@ -245,49 +251,6 @@ public abstract class Entity implements Cloneable
 {
   abstract void display();
   abstract void display(int x, int y);
-}
-
-public class TerreignEntity extends Entity
-{
-  Boolean passable;
-  ArrayList<String> events = new ArrayList<String>();
-  PImage art = null;
-  public TerreignEntity(String data)
-  {
-    String[] datas = data.split(",");
-    if (!(datas[0].equals("none")))
-    {
-      art = loadImage(datas[0]);
-    }
-    
-    passable = Boolean.parseBoolean(datas[1]);
-
-    if(!(datas[2].equals("none")))
-    {
-      datas = datas[2].split("-");
-      for(int i = 0; i < datas.length; i++)
-      {
-        events.add(datas[i]);
-      }
-    }
-  }
-  boolean  getPassable(){return passable;}
-  @Override
-  void display()
-  {
-    if(art!=null)
-    {
-      image(art,0,0);
-    }
-  }
-  @Override
-  void display(int x, int y)
-  {
-    if(art!=null)
-    {
-      image(art,x,y);
-    }
-  }  
 }
 
 public class Unit extends Entity

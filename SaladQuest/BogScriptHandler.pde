@@ -20,7 +20,9 @@ static class BogScriptHandler
   void setLevel(Level l){this.l = l;}
   void relayCommand(String target, String command)
   {
-    
+    if(target.equals("Game")){gH.processCommand(command);}
+    else if(target.equals("Map")){mMH.processCommand(command);}
+    else if(target.equals("Level")){l.processCommand(command);}
   }
   void printStatus()
   {
@@ -31,5 +33,5 @@ static class BogScriptHandler
 }
 interface commandable
 {
-  void processCommand();
+  void processCommand(String command);
 }

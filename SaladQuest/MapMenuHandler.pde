@@ -109,7 +109,7 @@ public class MapMenuHandler implements commandable
     text("Main Menu",840,462);
   }
   @Override
-  void processCommand()
+  void processCommand(String command)
   {
     
   }
