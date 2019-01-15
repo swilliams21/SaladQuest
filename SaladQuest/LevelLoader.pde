@@ -1,5 +1,5 @@
 import java.util.HashSet;
-public class Level
+public class Level implements commandable
 {
   ArrayList<ArrayList<TerreignEntity>> map;
   ArrayList<TerreignEntity> mapIndex;
@@ -234,6 +234,11 @@ public class Level
   }
   void key(char a){player.key(a);}
   void noKey(char a){player.noKey(a);}
+  @Override
+  void processCommand()
+  {
+    
+  }
 }
 
 public abstract class Entity implements Cloneable

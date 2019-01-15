@@ -1,4 +1,4 @@
-public class MapMenuHandler
+public class MapMenuHandler implements commandable
 {
    int menuMapX = 0, menuMapY = 0;
    ArrayList<LevelIndex> levelIndexes;
@@ -107,5 +107,10 @@ public class MapMenuHandler
     text("Enter Level",840,362);
     text("Save Menu",840,412);
     text("Main Menu",840,462);
+  }
+  @Override
+  void processCommand()
+  {
+    
   }
 }

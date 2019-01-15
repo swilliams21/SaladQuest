@@ -1,6 +1,7 @@
 //From an MVC point of view, this class acts like a Central "Model" and has Functions of a View
 
-public class GameHandler{
+public class GameHandler implements commandable
+{
   String mode;
   MapMenuHandler MMH = new MapMenuHandler();
   Level LL = null;
@@ -68,4 +69,9 @@ public class GameHandler{
         LL.display();
       }
     }
+  @Override
+  void processCommand()
+  {
+    
+  }
 }

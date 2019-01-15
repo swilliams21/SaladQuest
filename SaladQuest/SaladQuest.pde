@@ -2,9 +2,13 @@
 //from an MVC point of view this class acts as a Controller and Initiailizer
 
 GameHandler gh;
+BogScriptHandler bsh; 
 void setup()//Prexisting method in processing. It will be used for initial load.
 {
+  bsh = new BSHSingleton().getBogScriptHandler();
   gh = new GameHandler();
+  bsh.setGameHandler(gh);
+  bsh.printStatus();
   size(1024,512);
   rectMode(CENTER);
   textMode(CENTER);
