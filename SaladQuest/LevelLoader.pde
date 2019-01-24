@@ -1,10 +1,8 @@
-import java.util.HashSet;
 public class Level implements commandable
 {
   ArrayList<ArrayList<TerreignEntity>> map;
   ArrayList<TerreignEntity> mapIndex;
   ArrayList<Unit> units;
-  HashSet<Character> keys;
   Player player;
   PImage background;
   float focusX = 0.0;
@@ -17,13 +15,13 @@ public class Level implements commandable
   float gravityX = 0.0;
   float gravityY = 1.0;
   boolean paused = true;
+  boolean display = true;
   Unit currentUnit; // mostly unused. It exists for future scripting with BogScript (example)(setcurrentunit>expectednumber deleteunit>expectednumber) It also updates on unit movement pre frame
   public Level(String file, Player  player)
   {
     map = new ArrayList<ArrayList<TerreignEntity>>();
     mapIndex = new ArrayList<TerreignEntity>();
     units = new ArrayList<Unit>();
-    keys = new HashSet<Character>();
     background = loadImage("Levels/"+file+"/"+"Background.png");
     BufferedReader scanMapIndex = createReader("Levels/"+file+"/"+"TerriegnEntities.txt");
     BufferedReader scanMap = createReader("Levels/"+file+"/"+"Map.txt");
@@ -72,44 +70,47 @@ public class Level implements commandable
   }
   void display()
   {
-    Point p = player.getPoint();
-    focus(p);
-
-    if(focusX<7.5){focusX=7.5;}
-    else if(focusX>widthX-7.5){focusX=widthX-7.5;}//fix this later
-    if(focusY<3.5){focusY=3.5;}
-    else if(focusY>heightY-3.5){focusY=heightY-3.5;} //fix this later //Min and max XY locations.
-    background(0);
-    pushMatrix();
-    translate(width/2, height/2);
-    translate(0, -heightY*scale);
-    translate(-(focusX*scale), (focusY*scale));//this is mostly completely broken
-    image(background, 0, 0);
-    popMatrix();
-    pushMatrix();
-    translate(width/2, height/2-scale);
-    translate(-(focusX*64), (focusY*scale));
-    for(int i = 0; i < map.size(); i++)
+    if(display==true)
     {
-      ArrayList<TerreignEntity> lineMap = map.get(i);
+      Point p = player.getPoint();
+      focus(p);
+  
+      if(focusX<7.5){focusX=7.5;}
+      else if(focusX>widthX-7.5){focusX=widthX-7.5;}//fix this later
+      if(focusY<3.5){focusY=3.5;}
+      else if(focusY>heightY-3.5){focusY=heightY-3.5;} //fix this later //Min and max XY locations.
+      background(0);
       pushMatrix();
-      for(int j = 0; j < lineMap.size(); j++)
+      translate(width/2, height/2);
+      translate(0, -heightY*scale);
+      translate(-(focusX*scale), (focusY*scale));//this is mostly completely broken
+      image(background, 0, 0);
+      popMatrix();
+      pushMatrix();
+      translate(width/2, height/2-scale);
+      translate(-(focusX*64), (focusY*scale));
+      for(int i = 0; i < map.size(); i++)
       {
-        lineMap.get(j).display();
-        translate(0,-scale);
+        ArrayList<TerreignEntity> lineMap = map.get(i);
+        pushMatrix();
+        for(int j = 0; j < lineMap.size(); j++)
+        {
+          lineMap.get(j).display();
+          translate(0,-scale);
+        }
+        popMatrix();
+        translate(scale,0);
       }
       popMatrix();
-      translate(scale,0);
+      pushMatrix();
+      translate(width/2, height/2);
+      translate(-focusX*scale, focusY*scale);
+      for(int i = 0; i < units.size(); i++)
+      {
+        units.get(i).display();
+      }
+      popMatrix();
     }
-    popMatrix();
-    pushMatrix();
-    translate(width/2, height/2);
-    translate(-focusX*scale, focusY*scale);
-    for(int i = 0; i < units.size(); i++)
-    {
-      units.get(i).display();
-    }
-    popMatrix();
   }
   void focus(Point p)
   {
@@ -240,10 +241,12 @@ public class Level implements commandable
   }
   void key(char a){player.key(a);}
   void noKey(char a){player.noKey(a);}
+  void setDisplay(boolean display){this.display = display;}
   @Override
   void processCommand(String command)
   {
-    
+    String datas[] = command.split(">");
+    if (datas[0].equals("setDisplay")){setDisplay(Boolean.parseBoolean(datas[1]));}
   }
 }
 

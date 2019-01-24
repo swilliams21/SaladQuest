@@ -75,6 +75,7 @@ public class MapMenuHandler implements commandable
    
    public void displayMapMenu()
   {
+    print("check");
     background(0);
      menuMapX = currentLevel.getX();
      menuMapY = currentLevel.getY();
@@ -111,6 +112,7 @@ public class MapMenuHandler implements commandable
   @Override
   void processCommand(String command)
   {
-    
+    String datas[] = command.split(">");
+    if (datas[0].equals("unlock")){levelIndexes.get(Integer.parseInt(datas[1])-1).setLocked(false);}
   }
 }
