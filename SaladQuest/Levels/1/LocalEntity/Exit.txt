@@ -1,1 +1,1 @@
-none,True,Map<True<unlock>2-Game<True<mode>Map Menu-Level<True<setDisplay>False
+none,True,Map<True<unlock>2-Game<True<mode>Map Menu-Level<True<setDisplay>False-Player<True<reset>controls-Player<True<reset>velocity

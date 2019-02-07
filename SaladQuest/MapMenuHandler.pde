@@ -75,7 +75,6 @@ public class MapMenuHandler implements commandable
    
    public void displayMapMenu()
   {
-    print("check");
     background(0);
      menuMapX = currentLevel.getX();
      menuMapY = currentLevel.getY();

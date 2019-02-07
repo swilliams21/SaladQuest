@@ -12,17 +12,20 @@ static class BogScriptHandler
   GameHandler gH;
   MapMenuHandler mMH;
   Level l;
+  Player p;
   GameHandler getGameHandler(){return gH;}
   MapMenuHandler getMapMenuHandler(){return mMH;}
   Level getLevel(){return l;}
   void setGameHandler(GameHandler gH){this.gH = gH;}
   void setMapMenuHandler(MapMenuHandler mMH){this.mMH = mMH;}
   void setLevel(Level l){this.l = l;}
+  void setPlayer(Player p){this.p = p;}
   void relayCommand(String target, String command)
   {
     if(target.equals("Game")){gH.processCommand(command);}
     else if(target.equals("Map")){mMH.processCommand(command);}
     else if(target.equals("Level")){l.processCommand(command);}
+    else if(target.equals("Player")){p.processCommand(command);}
   }
   void printStatus()
   {

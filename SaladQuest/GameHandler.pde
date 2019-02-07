@@ -32,6 +32,7 @@ public class GameHandler implements commandable
   {
   MMH.importLevelindex(fileLocation+"/Levels.txt");
   player = new Player(fileLocation+"/Player.txt", 0, 0);
+  new BSHSingleton().getBogScriptHandler().setPlayer(player);
   mode("Map Menu");
   }
   
