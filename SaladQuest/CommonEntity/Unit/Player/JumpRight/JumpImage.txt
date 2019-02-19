@@ -1,0 +1,6 @@
+CommonEntity/Unit/Player/JumpRight/JumpR0.png
+CommonEntity/Unit/Player/JumpRight/JumpR1.png
+CommonEntity/Unit/Player/JumpRight/JumpR2.png
+CommonEntity/Unit/Player/JumpRight/JumpR3.png
+CommonEntity/Unit/Player/JumpRight/JumpR4.png
+CommonEntity/Unit/Player/JumpRight/JumpR5.png

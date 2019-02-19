@@ -1,2 +1,4 @@
-stand
+stand_right
 CommonEntity/Unit/Player/Stand/Stand.txt
+jump_right
+CommonEntity/Unit/Player/JumpRight/Jump.txt

@@ -256,59 +256,6 @@ public abstract class Entity implements Cloneable
   abstract void display(int x, int y);
 }
 
-public class UnitAnimation
-{
-  String name;
-  int counter;
-  int base = 0;
-  ArrayList<PImage> frame = new ArrayList<PImage>();
-  public UnitAnimation(String name, String fileLocation)
-  {
-    String frameLocation, frameIndex, data;
-    counter = 0;
-    try{
-      this.name = name;
-      ArrayList<PImage> tempList = new ArrayList<PImage>();
-      BufferedReader scan = createReader(fileLocation);
-      frameLocation = scan.readLine();
-      frameIndex = scan.readLine();
-      BufferedReader scanLocation = createReader(frameLocation);
-      BufferedReader scanIndex = createReader(frameIndex);
-      data = scanLocation.readLine();
-      while(data!=null)
-      {
-        PImage picture = loadImage(data);
-        tempList.add(picture);
-        data = scanLocation.readLine();
-      }
-      data = scanIndex.readLine();
-      while(data!=null)
-      {
-        int i = Integer.parseInt(data);
-        frame.add(tempList.get(i));
-        data = scanIndex.readLine();
-      }
-    }catch(Exception e){print("animation read error");}
-  }
-  public String getName()
-  {
-    return name;
-  }
-  public void resetCounter()
-  {
-    counter = 0;
-  }
-  public void display(float x, float y)
-  {
-    PImage picture = frame.get(counter);
-    image(picture, x, y);
-    counter++;
-    if (counter >= frame.size())
-    {
-      counter = base;
-    }
-  }
-}
 public class Point
 {
   float x, y;

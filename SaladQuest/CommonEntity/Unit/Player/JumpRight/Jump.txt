@@ -1,0 +1,3 @@
+CommonEntity/Unit/Player/JumpRight/JumpImage.txt
+CommonEntity/Unit/Player/JumpRight/JumpIndex.txt
+9

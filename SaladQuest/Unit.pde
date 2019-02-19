@@ -51,6 +51,20 @@ public class Unit extends Entity implements commandable
   float getVelocityY(){return velocityY;}
   boolean getOnGround(){return onGround;}
   Point getPoint(){return new Point(centerX, centerY);}
+  void setAnimation(String name)
+  {
+    for(int i = 0; i < animations.size(); i++)
+    {
+      if(animations.get(i).getName().equals(name))
+      {
+        if(!animations.get(i).getName().equals(currentAnimation.getName()))
+        {
+          animations.get(i).resetCounter();
+          currentAnimation = animations.get(i);
+        }
+      }
+    }
+  }
   void setVelocityX(float velocityX){this.velocityX=velocityX;}
   void setVelocityY(float velocityY){this.velocityY=velocityY;}
   void setOnGround(boolean ground){onGround = ground;}
@@ -175,9 +189,35 @@ public class Unit extends Entity implements commandable
     print("super");
   }
   @Override
-  void display(){currentAnimation.display(centerX-widthX/2, -(centerY+heightY/2));}
+  void display()
+  {
+    if(right)
+    {
+      if(onGround)
+      {
+        if(false)
+        {
+          
+        }
+        else
+        {
+          setAnimation("stand_right");
+        }
+      }
+      else
+      {
+        setAnimation("jump_right");
+      }
+    }
+    else
+    {
+      //code this later
+    }
+    currentAnimation.display(centerX-widthX/2, -(centerY+heightY/2));
+    
+  }
   @Override
-  void display(int x, int y){currentAnimation.display(x, y);}
+  void display(int x, int y){currentAnimation.display(x, y);}//NO
 }
 
 public class Player extends Unit
@@ -191,9 +231,17 @@ public class Player extends Unit
   }
   void key(char a)
   {
-    if(a=='a'){keyLeft=true;}
+    if(a=='a')
+    {
+      keyLeft=true;
+      right=false;
+    }
     else if(a=='d'){keyRight=true;}
-    else if(a=='w'){keyUp=true;}
+    else if(a=='w')
+    {
+      keyUp=true;
+      right=true;
+    }
   }
   void noKey(char a)
   {
@@ -221,5 +269,60 @@ public class Player extends Unit
       return;
     }
     super.processCommand(command);
+  }
+}
+
+public class UnitAnimation
+{
+  String name;
+  int counter;
+  int base = 0;
+  ArrayList<PImage> frame = new ArrayList<PImage>();
+  public UnitAnimation(String name, String fileLocation)
+  {
+    String frameLocation, frameIndex, data;
+    counter = 0;
+    try{
+      this.name = name;
+      ArrayList<PImage> tempList = new ArrayList<PImage>();
+      BufferedReader scan = createReader(fileLocation);
+      frameLocation = scan.readLine();
+      frameIndex = scan.readLine();
+      base = Integer.parseInt(scan.readLine());
+      BufferedReader scanLocation = createReader(frameLocation);
+      BufferedReader scanIndex = createReader(frameIndex);
+      data = scanLocation.readLine();
+      while(data!=null)
+      {
+        PImage picture = loadImage(data);
+        tempList.add(picture);
+        data = scanLocation.readLine();
+      }
+      data = scanIndex.readLine();
+      while(data!=null)
+      {
+        int i = Integer.parseInt(data);
+        frame.add(tempList.get(i));
+        data = scanIndex.readLine();
+      }
+    }catch(Exception e){print("animation read error");}
+  }
+  public String getName()
+  {
+    return name;
+  }
+  public void resetCounter()
+  {
+    counter = 0;
+  }
+  public void display(float x, float y)
+  {
+    PImage picture = frame.get(counter);
+    image(picture, x, y);
+    counter++;
+    if (counter >= frame.size())
+    {
+      counter = base;
+    }
   }
 }
